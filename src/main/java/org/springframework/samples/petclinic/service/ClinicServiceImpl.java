@@ -105,5 +105,11 @@ public class ClinicServiceImpl implements ClinicService {
         return vetRepository.findAll();
     }
 
+	@Override
+	public Collection<Pet> findPets() throws DataAccessException {
+		// TODO Auto-generated method stub
+		return petRepository.findAll();
+	}
+
 
 }

@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 /**
- * Test class for the {@link PetController}
+ * Test class for the {@link OwnerPetController}
  *
  * @author Colin But
  */
@@ -33,7 +33,7 @@ public class PetControllerTests {
     private static final int TEST_PET_ID = 1;
 
     @Autowired
-    private PetController petController;
+    private OwnerPetController petController;
 
     @Autowired
     private FormattingConversionServiceFactoryBean formattingConversionServiceFactoryBean;
