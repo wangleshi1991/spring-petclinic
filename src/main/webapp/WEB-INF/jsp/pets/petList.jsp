@@ -17,7 +17,7 @@
 
     <h2>Pets</h2>
 
-    <datatables:table id="vets" data="${pets.petList}" row="pet" theme="bootstrap2" cssClass="table table-striped"
+    <datatables:table id="pets" data="${pets.petList}" row="pet" theme="bootstrap2" cssClass="table table-striped"
                       pageable="false" info="false">
         <datatables:column title="Name">
             <c:out value="${pet.name}"></c:out>

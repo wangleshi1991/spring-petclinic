@@ -29,6 +29,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -36,6 +38,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.model.adapter.LocalDateAdapter;
 
 /**
  * Simple business object representing a pet.
@@ -64,6 +67,7 @@ public class Pet extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
     private Set<Visit> visits;
 
+    @XmlJavaTypeAdapter(type = LocalDate.class, value = LocalDateAdapter.class)
     public LocalDate getBirthDate() {
         return this.birthDate;
     }
@@ -80,6 +84,7 @@ public class Pet extends NamedEntity {
         this.type = type;
     }
 
+    @XmlElement
     public Owner getOwner() {
         return this.owner;
     }
