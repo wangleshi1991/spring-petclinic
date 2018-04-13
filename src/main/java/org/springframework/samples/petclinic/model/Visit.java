@@ -20,11 +20,18 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.model.adapter.LocalDateAdapter;
+import org.springframework.samples.petclinic.model.adapter.LocalDateSerializer;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -33,6 +40,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "visits")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Visit extends BaseEntity {
 
     /**
@@ -71,6 +79,8 @@ public class Visit extends BaseEntity {
      *
      * @return Value of property date.
      */
+    @XmlJavaTypeAdapter(type = LocalDate.class, value = LocalDateAdapter.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     public LocalDate getDate() {
         return this.date;
     }
