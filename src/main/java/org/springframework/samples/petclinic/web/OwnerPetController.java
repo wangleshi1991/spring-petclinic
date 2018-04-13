@@ -15,20 +15,29 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Collection;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author Juergen Hoeller
@@ -107,6 +116,19 @@ public class OwnerPetController {
             this.clinicService.savePet(pet);
             return "redirect:/owners/{ownerId}";
         }
+    }
+    
+    @RequestMapping(value = "/pets/{petId}/visits.json")
+    @ResponseBody
+    public List<Visit> showResourcesVisitList(@PathVariable("petId") int petId, Owner owner) {
+    	List<Pet> ownerPets = owner.getPets();
+    	for (Pet p: ownerPets){
+    		if (p.getId().equals(petId)){
+    			return p.getVisits();
+    		}
+    	}
+    	return new ArrayList<Visit>(0);
+        
     }
 
 }

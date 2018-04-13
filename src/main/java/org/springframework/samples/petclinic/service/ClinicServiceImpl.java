@@ -106,8 +106,9 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
 	@Override
+	@Transactional(readOnly = true)
+    @Cacheable(value = "pets")
 	public Collection<Pet> findPets() throws DataAccessException {
-		// TODO Auto-generated method stub
 		return petRepository.findAll();
 	}
 
