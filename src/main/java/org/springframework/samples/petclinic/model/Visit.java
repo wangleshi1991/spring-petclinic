@@ -17,14 +17,22 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.model.adapter.LocalDateAdapter;
+import org.springframework.samples.petclinic.model.adapter.LocalDateSerializer;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -33,6 +41,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "visits")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Visit extends BaseEntity {
 
     /**
@@ -57,6 +66,12 @@ public class Visit extends BaseEntity {
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
+    /**
+     * Holds value of property vet.
+     */
+    @ManyToOne
+    @JoinColumn(name = "vet_id")
+    private Vet vet;
 
     /**
      * Creates a new instance of Visit for the current date
@@ -71,6 +86,8 @@ public class Visit extends BaseEntity {
      *
      * @return Value of property date.
      */
+    @XmlJavaTypeAdapter(type = LocalDate.class, value = LocalDateAdapter.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     public LocalDate getDate() {
         return this.date;
     }
@@ -118,6 +135,24 @@ public class Visit extends BaseEntity {
      */
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+    
+    /**
+     * Getter for property vet.
+     * 
+     * @return Value of property vet.
+     */
+    public Vet getVet() {
+    	return this.vet;
+    }
+    
+    /**
+     * Setter for property vet.
+     * 
+     * @param vet New value of property vet.
+     */
+    public void setVet(Vet vet){
+    	this.vet = vet;
     }
 
 }

@@ -15,11 +15,14 @@
  */
 package org.springframework.samples.petclinic.repository.jpa;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.repository.PetRepository;
@@ -59,5 +62,13 @@ public class JpaPetRepositoryImpl implements PetRepository {
             this.em.merge(pet);
         }
     }
+
+	@Override
+    @Cacheable(value = "pets")
+	@SuppressWarnings("unchecked")
+	public Collection<Pet> findAll() throws DataAccessException {
+		// TODO Auto-generated method stub
+        return this.em.createQuery("SELECT p FROM Pet p").getResultList();
+	}
 
 }

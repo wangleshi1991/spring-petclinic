@@ -105,5 +105,12 @@ public class ClinicServiceImpl implements ClinicService {
         return vetRepository.findAll();
     }
 
+	@Override
+	@Transactional(readOnly = true)
+    @Cacheable(value = "pets")
+	public Collection<Pet> findPets() throws DataAccessException {
+		return petRepository.findAll();
+	}
+
 
 }

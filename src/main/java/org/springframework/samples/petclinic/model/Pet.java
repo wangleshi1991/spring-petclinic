@@ -29,13 +29,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.model.adapter.LocalDateAdapter;
+import org.springframework.samples.petclinic.model.adapter.LocalDateSerializer;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Simple business object representing a pet.
@@ -46,6 +53,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "pets")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
@@ -64,6 +72,8 @@ public class Pet extends NamedEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
     private Set<Visit> visits;
 
+    @XmlJavaTypeAdapter(type = LocalDate.class, value = LocalDateAdapter.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     public LocalDate getBirthDate() {
         return this.birthDate;
     }
@@ -80,6 +90,7 @@ public class Pet extends NamedEntity {
         this.type = type;
     }
 
+    @XmlElement
     public Owner getOwner() {
         return this.owner;
     }
